@@ -7,4 +7,7 @@
     "GATEWAY_VERSION": "worker-v1",
     "CORS_ORIGINS": "https://ibka512.github.io",
   },
+  "secrets": {
+    "required": ["DEEPSEEK_API_KEY"],
+  },
 }
