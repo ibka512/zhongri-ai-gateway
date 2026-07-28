@@ -62,6 +62,40 @@ describe('DeepSeek model adapter', () => {
     expect(fetchMock).not.toHaveBeenCalled();
   });
 
+  it('allows only the official Cloudflare AI Gateway DeepSeek base URL', async () => {
+    const mock = new MockModelAdapter();
+    const generated = await mock.generateQuestions(validGenerateQuestionsRequest);
+    if (generated.kind !== 'success') {
+      throw new Error('Mock fixture did not generate a success result');
+    }
+
+    const fetchMock = vi
+      .fn<typeof fetch>()
+      .mockResolvedValue(providerResponse(JSON.stringify(generated.result)));
+    const adapter = new DeepSeekModelAdapter({ fetch: fetchMock });
+
+    await expect(
+      adapter.generateQuestions(validGenerateQuestionsRequest, {
+        DEEPSEEK_API_KEY: 'test-only-key',
+        DEEPSEEK_BASE_URL: 'https://gateway.ai.cloudflare.com/v1/account-123/zhongri/deepseek',
+      }),
+    ).resolves.toMatchObject({ kind: 'success', model: DEEPSEEK_MODEL });
+    expect(fetchMock).toHaveBeenCalledWith(
+      'https://gateway.ai.cloudflare.com/v1/account-123/zhongri/deepseek/chat/completions',
+      expect.anything(),
+    );
+
+    const invalidFetchMock = vi.fn<typeof fetch>();
+    const invalidAdapter = new DeepSeekModelAdapter({ fetch: invalidFetchMock });
+    await expect(
+      invalidAdapter.generateQuestions(validGenerateQuestionsRequest, {
+        DEEPSEEK_API_KEY: 'test-only-key',
+        DEEPSEEK_BASE_URL: 'https://example.com/provider',
+      }),
+    ).resolves.toEqual({ kind: 'failure', code: 'unavailable' });
+    expect(invalidFetchMock).not.toHaveBeenCalled();
+  });
+
   it.each([
     [408, 'timeout'],
     [429, 'rate-limited'],

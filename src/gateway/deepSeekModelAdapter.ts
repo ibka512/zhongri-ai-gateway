@@ -2,9 +2,12 @@ import { GenerateQuestionsResultSchema, type GenerateQuestionsRequest } from '..
 import { buildGenerateQuestionsMessages } from './promptRegistry';
 import type { Env, ModelAdapter, ProviderResult } from './types';
 
-const DEEPSEEK_ENDPOINT = 'https://api.deepseek.com/chat/completions';
+const DEEPSEEK_BASE_URL = 'https://api.deepseek.com';
+const DEEPSEEK_ENDPOINT = `${DEEPSEEK_BASE_URL}/chat/completions`;
 const DEEPSEEK_MODEL = 'deepseek-v4-flash';
 const PROVIDER_TIMEOUT_MS = 12_000;
+const CLOUDFLARE_AI_GATEWAY_BASE_URL =
+  /^https:\/\/gateway\.ai\.cloudflare\.com\/v1\/[A-Za-z0-9_-]+\/[A-Za-z0-9_-]+\/deepseek$/;
 
 interface DeepSeekModelAdapterOptions {
   readonly fetch?: typeof fetch;
@@ -23,7 +26,8 @@ export class DeepSeekModelAdapter implements ModelAdapter {
 
   async generateQuestions(request: GenerateQuestionsRequest, env: Env): Promise<ProviderResult> {
     const apiKey = env.DEEPSEEK_API_KEY?.trim();
-    if (!apiKey || !this.#fetch) {
+    const endpoint = endpointFor(env);
+    if (!apiKey || !this.#fetch || !endpoint) {
       return { kind: 'failure', code: 'unavailable' };
     }
 
@@ -35,7 +39,7 @@ export class DeepSeekModelAdapter implements ModelAdapter {
     }, this.#timeoutMs);
 
     try {
-      const response = await this.#fetch(DEEPSEEK_ENDPOINT, {
+      const response = await this.#fetch(endpoint, {
         method: 'POST',
         headers: {
           accept: 'application/json',
@@ -106,6 +110,16 @@ function failureCodeForStatus(
     return 'invalid-request';
   }
   return 'upstream';
+}
+
+function endpointFor(env: Env): string | null {
+  const configuredBaseUrl = env.DEEPSEEK_BASE_URL?.trim();
+  if (!configuredBaseUrl || configuredBaseUrl === DEEPSEEK_BASE_URL) {
+    return DEEPSEEK_ENDPOINT;
+  }
+  return CLOUDFLARE_AI_GATEWAY_BASE_URL.test(configuredBaseUrl)
+    ? `${configuredBaseUrl}/chat/completions`
+    : null;
 }
 
 function providerContent(body: unknown): string | null {

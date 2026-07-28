@@ -6,6 +6,7 @@ import type {
 
 export interface Env {
   readonly CORS_ORIGINS?: string;
+  readonly DEEPSEEK_BASE_URL?: string;
   readonly DEEPSEEK_API_KEY?: string;
   readonly GATEWAY_VERSION?: string;
   readonly MOCK_PROVIDER?: string;

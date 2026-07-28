@@ -15,11 +15,19 @@ Schema、CORS、Mock provider、DeepSeek adapter、稳定 failure mapping、15 �
 确认 Secret 已被读取，但 Worker 到 DeepSeek 的出站 `fetch` 以 `TypeError` 失败，未收到供应商 HTTP 响应；
 因此目前仍未验证真实 DeepSeek 成功链路。
 
+为处理 Cloudflare Worker 直连 DeepSeek 的出站失败，Gateway 现在支持受限的
+`DEEPSEEK_BASE_URL` 运行时变量：未设置时仍使用 `https://api.deepseek.com`；设置时只接受
+Cloudflare 官方 AI Gateway 的 DeepSeek 基础地址
+`https://gateway.ai.cloudflare.com/v1/{account_id}/{gateway_id}/deepseek`，并自动追加
+`/chat/completions`。该变量尚未在生产环境启用，也不接受任意外部 URL；需要先在 Cloudflare
+AI Gateway 创建网关并完成单独验证。
+
 `contracts/ai-task-protocol-v1.json` 是两仓共享 fixture；本仓库新增的契约测试会校验它，主仓库的
 `npm run verify:gateway-contract` 会比较两份 fixture 的 SHA，防止协议样例漂移。
 
-下一步：在不把 Key 暴露给 PWA 的前提下，单独确定可用的 Cloudflare→DeepSeek 出站方案；在此之前继续使用
-稳定 failure 和本地规则课程回退。旧的误建 `sk-…` Secret 名称尚未清理，需负责人在确认后删除或轮换。
+下一步：在不把 Key 暴露给 PWA 的前提下，创建并验证 Cloudflare AI Gateway 网关，再设置受限的
+`DEEPSEEK_BASE_URL` 并重新执行合成联调；在此之前继续使用稳定 failure 和本地规则课程回退。旧的误建
+`sk-…` Secret 名称尚未清理，需负责人在确认后删除或轮换。
 
 ## 本地验证
 
