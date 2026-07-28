@@ -7,9 +7,9 @@ Gateway 也不提供任意 prompt、任意 model 或通用代理。
 
 本地 Worker 工程已完成并提交为 `f27cb6e`，共享契约测试提交为 `49dc636`，公开远端
 [`ibka512/zhongri-ai-gateway`](https://github.com/ibka512/zhongri-ai-gateway) 的 `main` 已推送并核对为
-代码基线为 `dcea4f7`。Worker 已部署到 [`zhongri-ai-gateway.moyu54433.workers.dev`](https://zhongri-ai-gateway.moyu54433.workers.dev)，
-当前干净版本为 `452527c6-179e-4b0b-9209-d8c32f21679a`，`GET /health` 已返回 200。固定端点、请求/响应
-Schema、CORS、Mock provider、DeepSeek adapter、稳定 failure mapping、15 个契约/适配器测试、TypeScript
+代码基线为 `cc9231f`。Worker 已部署到 [`zhongri-ai-gateway.moyu54433.workers.dev`](https://zhongri-ai-gateway.moyu54433.workers.dev)，
+当前干净版本为 `51acbcf5-7314-4e2f-ac0c-1c67a4098265`，`GET /health` 已返回 200。固定端点、请求/响应
+Schema、CORS、Mock provider、DeepSeek adapter、稳定 failure mapping、16 个契约/适配器测试、TypeScript
 构建和 secret scan 均已通过。Cloudflare 已存在名为 `DEEPSEEK_API_KEY` 的 Secret（只核对名称，值未被读取、
 写入仓库或日志）；使用合成 fixture 的真实联调返回 HTTP 200 的合同 failure `unavailable`。临时安全 tail
 确认 Secret 已被读取，但 Worker 到 DeepSeek 的出站 `fetch` 以 `TypeError` 失败，未收到供应商 HTTP 响应；
