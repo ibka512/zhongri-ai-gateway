@@ -5,12 +5,14 @@ Gateway 也不提供任意 prompt、任意 model 或通用代理。
 
 ## 当前状态（2026-07-28）
 
-本地 Worker 工程已完成并提交为 `f27cb6e`：固定端点、请求/响应 Schema、CORS、Mock provider、
+本地 Worker 工程已完成并提交为 `f27cb6e`，交接文档提交为 `c56918e`；公开远端为
+[`ibka512/zhongri-ai-gateway`](https://github.com/ibka512/zhongri-ai-gateway)，`main` 已推送并核对为
+`c56918e`。固定端点、请求/响应 Schema、CORS、Mock provider、
 DeepSeek adapter、稳定 failure mapping、13 个契约/适配器测试、TypeScript 构建和 secret scan 均已
-通过，Wrangler dry-run 也已通过。当前尚未创建 GitHub 远端仓库、配置 Cloudflare Secret 或执行真实
-DeepSeek 请求/生产部署。
+通过，Wrangler dry-run 也已通过。当前仍未配置 Cloudflare Secret，也未执行真实 DeepSeek 请求或
+生产部署。
 
-下一步顺序：先确认远端仓库可见性并发布本工程，再与 `zhongri-v2` 做双端 contract tests；真实 Secret
+下一步顺序：与 `zhongri-v2` 做双端 contract tests；真实 Secret
 和生产联调必须单独批准。
 
 ## 本地验证
