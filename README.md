@@ -7,7 +7,7 @@ Gateway 也不提供任意 prompt、任意 model 或通用代理。
 
 本地 Worker 工程已完成并提交为 `f27cb6e`，共享契约测试提交为 `49dc636`，公开远端
 [`ibka512/zhongri-ai-gateway`](https://github.com/ibka512/zhongri-ai-gateway) 的 `main` 已推送并核对为
-`dcea4f7`。Worker 已部署到 [`zhongri-ai-gateway.moyu54433.workers.dev`](https://zhongri-ai-gateway.moyu54433.workers.dev)，
+代码基线为 `dcea4f7`。Worker 已部署到 [`zhongri-ai-gateway.moyu54433.workers.dev`](https://zhongri-ai-gateway.moyu54433.workers.dev)，
 当前干净版本为 `452527c6-179e-4b0b-9209-d8c32f21679a`，`GET /health` 已返回 200。固定端点、请求/响应
 Schema、CORS、Mock provider、DeepSeek adapter、稳定 failure mapping、15 个契约/适配器测试、TypeScript
 构建和 secret scan 均已通过。Cloudflare 已存在名为 `DEEPSEEK_API_KEY` 的 Secret（只核对名称，值未被读取、
