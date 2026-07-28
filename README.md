@@ -3,6 +3,16 @@
 独立的 Cloudflare Worker 边界，只暴露受约束的 `generateQuestions` 任务。PWA 不保存供应商密钥，
 Gateway 也不提供任意 prompt、任意 model 或通用代理。
 
+## 当前状态（2026-07-28）
+
+本地 Worker 工程已完成并提交为 `f27cb6e`：固定端点、请求/响应 Schema、CORS、Mock provider、
+DeepSeek adapter、稳定 failure mapping、13 个契约/适配器测试、TypeScript 构建和 secret scan 均已
+通过，Wrangler dry-run 也已通过。当前尚未创建 GitHub 远端仓库、配置 Cloudflare Secret 或执行真实
+DeepSeek 请求/生产部署。
+
+下一步顺序：先确认远端仓库可见性并发布本工程，再与 `zhongri-v2` 做双端 contract tests；真实 Secret
+和生产联调必须单独批准。
+
 ## 本地验证
 
 ```bash
