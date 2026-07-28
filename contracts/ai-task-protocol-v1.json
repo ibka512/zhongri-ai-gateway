@@ -1,0 +1,143 @@
+{
+  "request": {
+    "schemaVersion": 1,
+    "task": "generateQuestions",
+    "requestId": "ai-request-ja-001",
+    "language": "ja",
+    "targetCount": 2,
+    "profile": {
+      "language": "ja",
+      "answeredCount": 12,
+      "accuracy": 0.75,
+      "recentIncorrectItemIds": ["word-ja-002"],
+      "recentTrend": "stable",
+      "dailyMinutes": 10,
+      "focus": "review"
+    },
+    "content": {
+      "manifestId": "builtin-ja-n5",
+      "contentVersion": 1,
+      "items": [
+        {
+          "itemId": "word-ja-001",
+          "language": "ja",
+          "headword": "時計",
+          "reading": "とけい",
+          "phonetic": null,
+          "meaning": "钟表；手表",
+          "partOfSpeech": "noun",
+          "level": "N5",
+          "difficulty": 1,
+          "tags": ["daily"]
+        },
+        {
+          "itemId": "word-ja-002",
+          "language": "ja",
+          "headword": "電話",
+          "reading": "でんわ",
+          "phonetic": null,
+          "meaning": "电话",
+          "partOfSpeech": "noun",
+          "level": "N5",
+          "difficulty": 2,
+          "tags": ["daily"]
+        }
+      ]
+    }
+  },
+  "success": {
+    "schemaVersion": 1,
+    "status": "success",
+    "task": "generateQuestions",
+    "requestId": "ai-request-ja-001",
+    "result": {
+      "questions": [
+        {
+          "itemId": "word-ja-001",
+          "question": {
+            "schemaVersion": 1,
+            "id": "ai-question-ja-001",
+            "language": "ja",
+            "type": "choice",
+            "skill": "vocabulary-meaning",
+            "prompt": {
+              "instruction": "选择最符合的中文释义",
+              "content": "時計"
+            },
+            "options": [
+              { "id": "ai-question-ja-001-clock", "label": "钟表" },
+              { "id": "ai-question-ja-001-phone", "label": "电话" }
+            ],
+            "answer": {
+              "kind": "choice",
+              "correctOptionIds": ["ai-question-ja-001-clock"]
+            },
+            "explanation": "時計表示钟表。",
+            "audio": null,
+            "metadata": {
+              "source": "ai",
+              "difficulty": 1,
+              "tags": ["ai", "vocabulary"]
+            }
+          }
+        },
+        {
+          "itemId": "word-ja-002",
+          "question": {
+            "schemaVersion": 1,
+            "id": "ai-question-ja-002",
+            "language": "ja",
+            "type": "textInput",
+            "skill": "vocabulary-recall",
+            "prompt": {
+              "instruction": "根据中文释义输入日语词或读音",
+              "content": "电话"
+            },
+            "options": [],
+            "answer": {
+              "kind": "textInput",
+              "acceptedAnswers": ["電話", "でんわ"],
+              "caseSensitive": false,
+              "trimWhitespace": true
+            },
+            "explanation": "電話表示电话。",
+            "audio": null,
+            "metadata": {
+              "source": "ai",
+              "difficulty": 2,
+              "tags": ["ai", "vocabulary"]
+            }
+          }
+        }
+      ]
+    },
+    "trace": {
+      "requestId": "ai-request-ja-001",
+      "schemaVersion": 1,
+      "task": "generateQuestions",
+      "promptVersion": "generate-questions-v1",
+      "model": "deepseek-v4-flash",
+      "gatewayVersion": "worker-v1",
+      "durationMs": 42
+    }
+  },
+  "failure": {
+    "schemaVersion": 1,
+    "status": "failure",
+    "task": "generateQuestions",
+    "requestId": "ai-request-ja-001",
+    "error": {
+      "code": "rate-limited",
+      "retryable": true
+    },
+    "trace": {
+      "requestId": "ai-request-ja-001",
+      "schemaVersion": 1,
+      "task": "generateQuestions",
+      "promptVersion": "generate-questions-v1",
+      "model": null,
+      "gatewayVersion": "worker-v1",
+      "durationMs": 8
+    }
+  }
+}
