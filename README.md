@@ -3,14 +3,15 @@
 独立的 Cloudflare Worker 边界，只暴露受约束的 `generateQuestions` 任务。PWA 不保存供应商密钥，
 Gateway 也不提供任意 prompt、任意 model 或通用代理。
 
-## 当前状态（2026-07-28）
+## 当前状态（2026-07-29）
 
 本地 Worker 工程已完成并提交为 `f27cb6e`，共享契约测试提交为 `49dc636`，交接文档提交为 `c56918e`；公开远端为
 [`ibka512/zhongri-ai-gateway`](https://github.com/ibka512/zhongri-ai-gateway)，`main` 已推送并核对为
-`49dc636`。固定端点、请求/响应 Schema、CORS、Mock provider、
+`49dc636`。Worker 已部署到 [`zhongri-ai-gateway.moyu54433.workers.dev`](https://zhongri-ai-gateway.moyu54433.workers.dev)，
+`GET /health` 已返回 200。固定端点、请求/响应 Schema、CORS、Mock provider、
 DeepSeek adapter、稳定 failure mapping、15 个契约/适配器测试、TypeScript 构建和 secret scan 均已
-通过，Wrangler dry-run 也已通过。当前仍未配置 Cloudflare Secret，也未执行真实 DeepSeek 请求或
-生产部署。
+通过，Wrangler dry-run 也已通过。当前仍未配置 Cloudflare Secret，也未执行真实 DeepSeek 请求；
+生产 Worker 已创建，缺少 Secret 时 AI 端点按合同返回 `unavailable`。
 
 `contracts/ai-task-protocol-v1.json` 是两仓共享 fixture；本仓库新增的契约测试会校验它，主仓库的
 `npm run verify:gateway-contract` 会比较两份 fixture 的 SHA，防止协议样例漂移。
