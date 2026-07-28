@@ -5,19 +5,21 @@ Gateway 也不提供任意 prompt、任意 model 或通用代理。
 
 ## 当前状态（2026-07-29）
 
-本地 Worker 工程已完成并提交为 `f27cb6e`，共享契约测试提交为 `49dc636`，交接文档提交为 `c56918e`；公开远端为
-[`ibka512/zhongri-ai-gateway`](https://github.com/ibka512/zhongri-ai-gateway)，`main` 已推送并核对为
-`49dc636`。Worker 已部署到 [`zhongri-ai-gateway.moyu54433.workers.dev`](https://zhongri-ai-gateway.moyu54433.workers.dev)，
-`GET /health` 已返回 200。固定端点、请求/响应 Schema、CORS、Mock provider、
-DeepSeek adapter、稳定 failure mapping、15 个契约/适配器测试、TypeScript 构建和 secret scan 均已
-通过，Wrangler dry-run 也已通过。当前仍未配置 Cloudflare Secret，也未执行真实 DeepSeek 请求；
-生产 Worker 已创建，缺少 Secret 时 AI 端点按合同返回 `unavailable`。
+本地 Worker 工程已完成并提交为 `f27cb6e`，共享契约测试提交为 `49dc636`，公开远端
+[`ibka512/zhongri-ai-gateway`](https://github.com/ibka512/zhongri-ai-gateway) 的 `main` 已推送并核对为
+`dd96d75`。Worker 已部署到 [`zhongri-ai-gateway.moyu54433.workers.dev`](https://zhongri-ai-gateway.moyu54433.workers.dev)，
+当前干净版本为 `452527c6-179e-4b0b-9209-d8c32f21679a`，`GET /health` 已返回 200。固定端点、请求/响应
+Schema、CORS、Mock provider、DeepSeek adapter、稳定 failure mapping、15 个契约/适配器测试、TypeScript
+构建和 secret scan 均已通过。Cloudflare 已存在名为 `DEEPSEEK_API_KEY` 的 Secret（只核对名称，值未被读取、
+写入仓库或日志）；使用合成 fixture 的真实联调返回 HTTP 200 的合同 failure `unavailable`。临时安全 tail
+确认 Secret 已被读取，但 Worker 到 DeepSeek 的出站 `fetch` 以 `TypeError` 失败，未收到供应商 HTTP 响应；
+因此目前仍未验证真实 DeepSeek 成功链路。
 
 `contracts/ai-task-protocol-v1.json` 是两仓共享 fixture；本仓库新增的契约测试会校验它，主仓库的
 `npm run verify:gateway-contract` 会比较两份 fixture 的 SHA，防止协议样例漂移。
 
-下一步顺序：真实 Secret
-和生产联调必须单独批准。
+下一步：在不把 Key 暴露给 PWA 的前提下，单独确定可用的 Cloudflare→DeepSeek 出站方案；在此之前继续使用
+稳定 failure 和本地规则课程回退。旧的误建 `sk-…` Secret 名称尚未清理，需负责人在确认后删除或轮换。
 
 ## 本地验证
 
@@ -52,5 +54,6 @@ Secret，也不默认调用 DeepSeek。
 
 ## 部署前置
 
-真实部署需要负责人另行确认 Cloudflare Worker 账户、域名/CORS 来源和 Secret 配置。禁止把
-`DEEPSEEK_API_KEY` 写入 Wrangler vars、`.dev.vars.example` 的真实值、测试 fixture、日志或 Git。
+真实部署已确认 Cloudflare Worker 账户、域名/CORS 来源和 Secret 配置；当前剩余阻塞是 Worker 到
+DeepSeek 的出站网络路径。禁止把 `DEEPSEEK_API_KEY` 写入 Wrangler vars、`.dev.vars.example` 的真实值、
+测试 fixture、日志或 Git，也不要把 Key 改为由浏览器直接提交。
