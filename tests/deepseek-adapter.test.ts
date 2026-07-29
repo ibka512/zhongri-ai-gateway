@@ -47,9 +47,44 @@ describe('DeepSeek model adapter', () => {
     const requestBody = JSON.parse(String(init?.body)) as Record<string, unknown>;
     expect(requestBody).toMatchObject({
       model: DEEPSEEK_MODEL,
+      thinking: { type: 'disabled' },
+      max_tokens: 2_048,
       response_format: { type: 'json_object' },
       stream: false,
     });
+  });
+
+  it('normalizes the provider compact candidate shape before strict validation', async () => {
+    const fetchMock = vi.fn<typeof fetch>().mockResolvedValue(
+      providerResponse(
+        JSON.stringify({
+          questions: [
+            {
+              itemId: 'word-ja-001',
+              question: {
+                type: 'choice',
+                prompt: '选择最符合的中文释义',
+                answer: '钟表',
+                distractors: ['电话'],
+              },
+            },
+            {
+              itemId: 'word-ja-002',
+              type: 'textInput',
+              prompt: '根据中文释义输入日语词或读音',
+              answer: ['電話', 'でんわ'],
+            },
+          ],
+        }),
+      ),
+    );
+    const adapter = new DeepSeekModelAdapter({ fetch: fetchMock });
+
+    await expect(
+      adapter.generateQuestions(validGenerateQuestionsRequest, {
+        DEEPSEEK_API_KEY: 'test-only-key',
+      }),
+    ).resolves.toMatchObject({ kind: 'success', model: DEEPSEEK_MODEL });
   });
 
   it('does not call the provider when the Worker Secret is absent', async () => {

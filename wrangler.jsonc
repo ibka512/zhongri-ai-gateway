@@ -3,9 +3,11 @@
   "name": "zhongri-ai-gateway",
   "main": "src/worker.ts",
   "compatibility_date": "2026-07-28",
+  "compatibility_flags": ["global_fetch_strictly_public"],
   "vars": {
     "GATEWAY_VERSION": "worker-v1",
     "CORS_ORIGINS": "https://ibka512.github.io",
+    "DEEPSEEK_BASE_URL": "https://gateway.ai.cloudflare.com/v1/c4ba132c6046a5dd51776cf407af1f81/zhongri-deepseek/deepseek",
   },
   "secrets": {
     "required": ["DEEPSEEK_API_KEY"],

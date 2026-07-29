@@ -7,6 +7,11 @@ const SYSTEM_PROMPT = [
   'Use only the supplied content items and language.',
   'Do not invent external URLs, sources, or unsupported question types.',
   'Return JSON matching the GenerateQuestionsResult contract with no additional fields.',
+  'The exact envelope is {"questions":[{"itemId":"<supplied item id>","question":{...}}]}.',
+  'Never flatten question fields into the candidate; every candidate must contain a nested question object.',
+  'Each question must include schemaVersion 1, id, language, type, skill, prompt, options, answer, explanation, audio, and metadata.',
+  'For type choice, use options and answer.kind choice; for type textInput, use options [] and answer.kind textInput.',
+  'Set metadata.source to ai, use only supplied item ids, and return at most targetCount candidates.',
 ].join(' ');
 
 export function buildGenerateQuestionsMessages(
